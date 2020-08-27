@@ -1,12 +1,18 @@
-// GET ELEMENTS
+/*************************************************
+ * // GET ELEMENTS
+ *************************************************/
+
 let canvas = document.querySelector('.grid-container');
 let buttons = document.querySelectorAll('.buttons');
 let box = '<div class="grid"></div>';
 let hue = 0;
 console.dir(canvas);
 
+/*************************************************
+ * // CREATE FUNCTION
+ *************************************************/
 
-buttons.forEach(button => button.addEventListener('click', (e)=> {
+function gridSet(e){
    let rows, column;
    canvas.innerHTML = '';
    
@@ -26,9 +32,9 @@ buttons.forEach(button => button.addEventListener('click', (e)=> {
    } else if (e.target.textContent === 'Clear Grid') {
       canvas.innerHTML = '';
    }
-}))
+}
 
-canvas.addEventListener('mouseover', ()=>{
+function draw() {
    let boxes = document.querySelectorAll('.grid');
    
    boxes.forEach(box => box.addEventListener('mouseover', (e)=> {
@@ -40,4 +46,25 @@ canvas.addEventListener('mouseover', ()=>{
       e.target.classList.add('fade');
    }))
    hue++;
-})
+}
+
+function debounce(func, wait = 20, immediate = true) {
+   var timeout;
+   return function() {
+     var context = this, args = arguments;
+     var later = function() {
+       timeout = null;
+       if (!immediate) func.apply(context, args);
+     };
+     var callNow = immediate && !timeout;
+     clearTimeout(timeout);
+     timeout = setTimeout(later, wait);
+     if (callNow) func.apply(context, args);
+   };
+ }
+
+ /*************************************************
+ * // ADD EVENT LISTENERS
+ *************************************************/
+buttons.forEach(button => button.addEventListener('click', gridSet))
+canvas.addEventListener('mouseover', debounce(draw));
